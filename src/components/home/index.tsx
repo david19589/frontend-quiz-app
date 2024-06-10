@@ -62,9 +62,8 @@ function home(props: {
       </div>
       <div className="flex flex-col gap-[12px]">
         {Data.quizzes.map((quiz, index) => (
-          <Link to={`/quiz/${quiz.title.toLowerCase()} `}>
+          <Link key={index} to={`/quiz/${quiz.title.toLowerCase()} `}>
             <button
-              key={index}
               onClick={() => {
                 props.setShowQuestions(true);
               }}
