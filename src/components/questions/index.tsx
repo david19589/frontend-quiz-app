@@ -1,6 +1,8 @@
 import IconHtml from "/src/assets/icon-html.svg";
 import IconCss from "/src/assets/icon-css.svg";
 import IconJs from "/src/assets/icon-js.svg";
+import IconCorrect from "/src/assets/icon-correct.svg";
+import IconInCorrect from "/src/assets/icon-incorrect.svg";
 import IconAccessibility from "/src/assets/icon-accessibility.svg";
 import Data from "../data.json";
 import { useParams } from "react-router-dom";
@@ -37,17 +39,20 @@ function Questions(props: { isToggled: boolean }) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [submit, setSubmit] = useState(false);
+  const [attemptedSubmit, setAttemptedSubmit] = useState(false);
 
   if (!questionObj) {
     return <div>Quiz not found</div>;
   }
 
   const handleNextQuestion = () => {
-    setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-    setSelectedAnswer(null);
-    setSubmit(false);
+    if (currentQuestionIndex < questionObj.questions.length - 1) {
+      setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+      setSelectedAnswer(null);
+      setSubmit(false);
+      setAttemptedSubmit(false);
+    }
   };
-
   const currentQuestion = questionObj.questions[currentQuestionIndex];
 
   const handleAnswer = (optionIndex: number) => {
@@ -55,20 +60,34 @@ function Questions(props: { isToggled: boolean }) {
       const isCorrectAnswer =
         currentQuestion.answer === currentQuestion.options[optionIndex];
       if (isCorrectAnswer) {
-        if (props.isToggled) {
-          return "border-3 border-[#26D782] bg-[#3B4D66]";
-        } else {
-          return "border-3 border-[#26D782] bg-[#FFF]";
-        }
+        return props.isToggled
+          ? "border-[#26D782] bg-[#3B4D66]"
+          : "border-[#26D782] bg-[#FFF]";
       } else if (selectedAnswer === optionIndex) {
-        if (props.isToggled) {
-          return "border-3 border-[#EE5454] bg-[#3B4D66]";
-        } else {
-          return "border-3 border-[#EE5454] bg-[#FFF]";
-        }
+        return props.isToggled
+          ? "border-[#EE5454] bg-[#3B4D66]"
+          : "border-[#EE5454] bg-[#FFF]";
+      } else {
+        return props.isToggled
+          ? "border-[#3B4D66] bg-[#3B4D66]"
+          : "border-[#FFF] bg-[#FFF]";
       }
+    } else if (selectedAnswer === optionIndex) {
+      return "border-[#A729F5]";
+    } else {
+      return props.isToggled
+        ? "border-[#3B4D66] bg-[#3B4D66]"
+        : "border-[#FFF] bg-[#FFF]";
     }
-    return "";
+  };
+
+  const handleSubmit = () => {
+    if (selectedAnswer === null) {
+      setAttemptedSubmit(true);
+    } else {
+      setSubmit(true);
+      setAttemptedSubmit(false);
+    }
   };
 
   return (
@@ -120,14 +139,19 @@ function Questions(props: { isToggled: boolean }) {
                   ? "bg-[#3B4D66]"
                   : "bg-[#FFF]"
               } ${submit ? "cursor-default" : "cursor-pointer"} ${
-                selectedAnswer === optionIndex
-                  ? "border-[3px] border-[#A729F5]"
-                  : ""
-              } flex items-center gap-[16px] p-[12px] w-full rounded-2xl`}
+                selectedAnswer === optionIndex && !submit
+                  ? handleAnswer(optionIndex)
+                  : handleAnswer(optionIndex)
+              } flex items-center gap-[16px] p-[12px] w-full rounded-2xl border-[3px]`}
             >
               <div
                 className={`${
-                  selectedAnswer === optionIndex
+                  selectedAnswer === optionIndex && submit
+                    ? currentQuestion.answer ===
+                      currentQuestion.options[optionIndex]
+                      ? "text-[#FFF] bg-[#26D782]"
+                      : "text-[#FFF] bg-[#EE5454]"
+                    : selectedAnswer === optionIndex
                     ? "text-[#FFF] bg-[#A729F5]"
                     : "text-[#626C7F] bg-[#F4F6FA]"
                 } w-[40px] p-[5.71px] rounded-md`}
@@ -136,20 +160,36 @@ function Questions(props: { isToggled: boolean }) {
                   {String.fromCharCode(65 + optionIndex)}
                 </h1>
               </div>
-              <h1
-                className={`${
-                  props.isToggled ? "text-[#FFF]" : "text-[#313E51]"
-                } text-[18px] font-[600] leading-[18px] text-start`}
-              >
-                {option}
-              </h1>
+              <div className="flex items-center justify-between w-full">
+                <h1
+                  className={`${
+                    props.isToggled ? "text-[#FFF]" : "text-[#313E51]"
+                  } text-[18px] font-[600] leading-[18px] text-start`}
+                >
+                  {option}
+                </h1>
+                {submit &&
+                  (currentQuestion.answer ===
+                  currentQuestion.options[optionIndex] ? (
+                    <img
+                      className="h-[39px]"
+                      src={IconCorrect}
+                      alt="IconCorrect"
+                    />
+                  ) : selectedAnswer === optionIndex ? (
+                    <img
+                      className="h-[39px]"
+                      src={IconInCorrect}
+                      alt="IconInCorrect"
+                    />
+                  ) : null)}
+              </div>
             </button>
           ))}
           {!submit ? (
             <button
               onClick={() => {
-                selectedAnswer !== null && setSubmit(true);
-                handleAnswer;
+                handleSubmit();
               }}
               className="p-[19px] w-full rounded-lg text-[18px] font-[600] leading-[18px] text-[#FFF] bg-[#A729F5]"
             >
@@ -162,6 +202,14 @@ function Questions(props: { isToggled: boolean }) {
             >
               Next Question
             </button>
+          )}
+          {attemptedSubmit && selectedAnswer === null && (
+            <div className="flex items-center justify-center gap-[8px]">
+              <img src={IconInCorrect} alt="IconInCorrect" />
+              <h1 className=" text-[18px] text-[#EE5454] font-[400] leading-[18px]">
+                Please select an answer
+              </h1>
+            </div>
           )}
         </div>
       </div>
