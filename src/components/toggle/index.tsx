@@ -2,23 +2,23 @@ import sunDark from "/src/assets/icon-sun-dark.svg";
 import moonDark from "/src/assets/icon-moon-dark.svg";
 import sunLight from "/src/assets/icon-sun-light.svg";
 import moonLight from "/src/assets/icon-moon-light.svg";
+import useToggle from "../use-toggle";
 
-function toggle(props: {
-  isToggled: boolean;
-  setIsToggled: (status: boolean) => void;
-}) {
+function Toggle() {
+  const { isToggled, setIsToggled } = useToggle();
+
   return (
     <div className="flex mb-[16px]">
       <img
         className="w-[25px]"
-        src={props.isToggled ? sunLight : sunDark}
+        src={isToggled ? sunLight : sunDark}
         alt="sunDark"
       />
       <div className="h-[24px]">
         <label className="inline-flex items-center mx-[16px] cursor-pointer">
           <input
             onClick={() => {
-              props.setIsToggled(!props.isToggled);
+              setIsToggled(!isToggled);
             }}
             type="checkbox"
             id="checkbox"
@@ -29,10 +29,10 @@ function toggle(props: {
       </div>
       <img
         className="w-[25px]"
-        src={props.isToggled ? moonLight : moonDark}
+        src={isToggled ? moonLight : moonDark}
         alt="moonDark"
       />
     </div>
   );
 }
-export default toggle;
+export default Toggle;

@@ -7,6 +7,8 @@ import IconAccessibility from "/src/assets/icon-accessibility.svg";
 import Data from "../data.json";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
+import { clsx } from "clsx";
+import useToggle from "../use-toggle";
 
 const icons: { [key: string]: string } = {
   "icon-html.svg": IconHtml,
@@ -31,7 +33,7 @@ function getBackgroundColor(title: string) {
   return backgroundColors[lowerCaseTitle] || "";
 }
 
-function Questions(props: { isToggled: boolean }) {
+function Questions() {
   const { question } = useParams();
   const questionObj = Data.quizzes.find(
     (quiz) => quiz.title.toLowerCase() === question?.toLowerCase()
@@ -40,6 +42,7 @@ function Questions(props: { isToggled: boolean }) {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [submit, setSubmit] = useState(false);
   const [attemptedSubmit, setAttemptedSubmit] = useState(false);
+  const { isToggled } = useToggle();
 
   if (!questionObj) {
     return <div>Quiz not found</div>;
@@ -60,22 +63,22 @@ function Questions(props: { isToggled: boolean }) {
       const isCorrectAnswer =
         currentQuestion.answer === currentQuestion.options[optionIndex];
       if (isCorrectAnswer) {
-        return props.isToggled
+        return isToggled
           ? "border-[#26D782] bg-[#3B4D66]"
           : "border-[#26D782] bg-[#FFF]";
       } else if (selectedAnswer === optionIndex) {
-        return props.isToggled
+        return isToggled
           ? "border-[#EE5454] bg-[#3B4D66]"
           : "border-[#EE5454] bg-[#FFF]";
       } else {
-        return props.isToggled
+        return isToggled
           ? "border-[#3B4D66] bg-[#3B4D66]"
           : "border-[#FFF] bg-[#FFF]";
       }
     } else if (selectedAnswer === optionIndex) {
       return "border-[#A729F5]";
     } else {
-      return props.isToggled
+      return isToggled
         ? "border-[#3B4D66] bg-[#3B4D66]"
         : "border-[#FFF] bg-[#FFF]";
     }
@@ -101,24 +104,26 @@ function Questions(props: { isToggled: boolean }) {
           <img src={icons[questionObj.icon]} alt={questionObj.title} />
         </div>
         <h1
-          className={`${
-            props.isToggled ? "text-[#FFF]" : "text-[#313E51]"
-          } text-[20px] font-[600] leading-[24px]`}
+          className={clsx(
+            isToggled ? "text-[#FFF]" : "text-[#313E51]",
+            "text-[20px] font-[600] leading-[24px]"
+          )}
         >
           {questionObj.title}
         </h1>
       </div>
       <h3
-        className={`${
-          props.isToggled ? "text-[#ABC1E1]" : "text-[#313E51]"
-        } text-[14px] italic font-[400] leading-[21px] text-[#626C7F] mb-[12px]`}
+        className={clsx(
+          isToggled ? "text-[#ABC1E1]" : "text-[#313E51]",
+          "text-[14px] italic font-[400] leading-[21px] text-[#626C7F] mb-[12px]"
+        )}
       >
         Question {currentQuestionIndex + 1} of 10
       </h3>
       <div className="mb-[24px]">
         <h1
           className={`${
-            props.isToggled ? "text-[#FFF]" : "text-[#313E51]"
+            isToggled ? "text-[#FFF]" : "text-[#313E51]"
           } text-[20px] font-[600] leading-[24px] mb-[12px]`}
         >
           {currentQuestion.question}
@@ -132,20 +137,19 @@ function Questions(props: { isToggled: boolean }) {
                   setSelectedAnswer(optionIndex);
                 }
               }}
-              className={`${
+              className={clsx(
                 selectedAnswer === optionIndex && submit
                   ? handleAnswer(optionIndex)
-                  : props.isToggled
+                  : isToggled
                   ? "bg-[#3B4D66]"
-                  : "bg-[#FFF]"
-              } ${submit ? "cursor-default" : "cursor-pointer"} ${
-                selectedAnswer === optionIndex && !submit
-                  ? handleAnswer(optionIndex)
-                  : handleAnswer(optionIndex)
-              } flex items-center gap-[16px] p-[12px] w-full rounded-2xl border-[3px]`}
+                  : "bg-[#FFF]",
+                submit ? "cursor-default" : "cursor-pointer",
+                handleAnswer(optionIndex),
+                "flex items-center gap-[16px] p-[12px] w-full rounded-2xl border-[3px]"
+              )}
             >
               <div
-                className={`${
+                className={clsx(
                   selectedAnswer === optionIndex && submit
                     ? currentQuestion.answer ===
                       currentQuestion.options[optionIndex]
@@ -153,8 +157,9 @@ function Questions(props: { isToggled: boolean }) {
                       : "text-[#FFF] bg-[#EE5454]"
                     : selectedAnswer === optionIndex
                     ? "text-[#FFF] bg-[#A729F5]"
-                    : "text-[#626C7F] bg-[#F4F6FA]"
-                } w-[40px] p-[5.71px] rounded-md`}
+                    : "text-[#626C7F] bg-[#F4F6FA]",
+                  "w-[40px] p-[5.71px] rounded-md"
+                )}
               >
                 <h1 className="text-[20px] font-[500] leading-[28px]">
                   {String.fromCharCode(65 + optionIndex)}
@@ -162,9 +167,10 @@ function Questions(props: { isToggled: boolean }) {
               </div>
               <div className="flex items-center justify-between w-full">
                 <h1
-                  className={`${
-                    props.isToggled ? "text-[#FFF]" : "text-[#313E51]"
-                  } text-[18px] font-[600] leading-[18px] text-start`}
+                  className={clsx(
+                    isToggled ? "text-[#FFF]" : "text-[#313E51]",
+                    "text-[18px] font-[600] leading-[18px] text-start"
+                  )}
                 >
                   {option}
                 </h1>

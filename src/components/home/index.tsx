@@ -4,6 +4,8 @@ import IconJs from "/src/assets/icon-js.svg";
 import IconAccessibility from "/src/assets/icon-accessibility.svg";
 import Data from "../data.json";
 import { Link } from "react-router-dom";
+import { clsx } from "clsx";
+import useToggle from "../use-toggle";
 
 const icons: { [key: string]: string } = {
   "icon-html.svg": IconHtml,
@@ -28,34 +30,38 @@ function getBackgroundColor(title: string) {
   return backgroundColors[lowerCaseTitle] || "";
 }
 
-function home(props: {
-  isToggled: boolean;
+function Home(props: {
   showQuestions: boolean;
   setShowQuestions: (status: boolean) => void;
 }) {
+  const { isToggled } = useToggle();
+
   return (
     <div className="w-full">
       <div className="mb-[40px]">
         <div className="mb-[16px]">
           <h2
-            className={`${
-              props.isToggled ? "text-[#FFF]" : "text-[#313E51]"
-            } text-[40px] font-[300] leading-[40px]`}
+            className={clsx(
+              isToggled ? "text-[#FFF]" : "text-[#313E51]",
+              "text-[40px] font-[300] leading-[40px]"
+            )}
           >
             Welcome to the
           </h2>
           <h1
-            className={`${
-              props.isToggled ? "text-[#FFF]" : "text-[#313E51]"
-            } text-[40px] font-[600] leading-[40px] text-[#313E51]`}
+            className={clsx(
+              isToggled ? "text-[#FFF]" : "text-[#313E51]",
+              "text-[40px] font-[600] leading-[40px]"
+            )}
           >
             Frontend Quiz!
           </h1>
         </div>
         <h3
-          className={`${
-            props.isToggled ? "text-[#ABC1E1]" : "text-[#313E51]"
-          } text-[14px] italic font-[400] leading-[21px] text-[#626C7F]`}
+          className={clsx(
+            isToggled ? "text-[#ABC1E1]" : "text-[#313E51]",
+            "text-[14px] italic font-[400] leading-[21px]"
+          )}
         >
           Pick a subject to get started.
         </h3>
@@ -67,21 +73,24 @@ function home(props: {
               onClick={() => {
                 props.setShowQuestions(true);
               }}
-              className={`${
-                props.isToggled ? "bg-[#3B4D66]" : "bg-[#FFF]"
-              } flex items-center gap-[16px] p-[12px] w-full rounded-lg`}
+              className={clsx(
+                isToggled ? "bg-[#3B4D66]" : "bg-[#FFF]",
+                "flex items-center gap-[16px] p-[12px] w-full rounded-lg"
+              )}
             >
               <div
-                className={`${getBackgroundColor(
-                  quiz.title
-                )} w-[40px] p-[5.71px] rounded-md`}
+                className={clsx(
+                  getBackgroundColor(quiz.title),
+                  "w-[40px] p-[5.71px] rounded-md"
+                )}
               >
                 <img src={icons[quiz.icon]} alt={quiz.title} />
               </div>
               <h1
-                className={`${
-                  props.isToggled ? "text-[#FFF]" : "text-[#313E51]"
-                } text-[18px] font-[600] leading-[18px]`}
+                className={clsx(
+                  isToggled ? "text-[#FFF]" : "text-[#313E51]",
+                  "text-[18px] font-[600] leading-[18px]"
+                )}
               >
                 {quiz.title}
               </h1>
@@ -93,4 +102,4 @@ function home(props: {
   );
 }
 
-export default home;
+export default Home;

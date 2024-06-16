@@ -2,8 +2,7 @@ import Home from "./home";
 import Questions from "./questions";
 import { Routes, Route } from "react-router-dom";
 
-function quizRoutes(props: {
-  isToggled: boolean;
+function QuizRoutes(props: {
   showQuestions: boolean;
   setShowQuestions: (status: boolean) => void;
 }) {
@@ -13,22 +12,14 @@ function quizRoutes(props: {
         path="/"
         element={
           <Home
-            isToggled={props.isToggled}
             showQuestions={props.showQuestions}
             setShowQuestions={props.setShowQuestions}
           />
         }
       />
-      <Route
-        path="quiz/:question"
-        element={
-          <Questions
-            isToggled={props.isToggled}
-          />
-        }
-      />
+      <Route path="quiz/:question" element={<Questions />} />
     </Routes>
   );
 }
 
-export default quizRoutes;
+export default QuizRoutes;
