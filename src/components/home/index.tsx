@@ -37,13 +37,13 @@ function Home(props: {
   const { isToggled } = useToggle();
 
   return (
-    <div className="w-full">
+    <div className="desktop:flex desktop:items-center desktop:justify-between desktop:max-w-[1160px] w-full">
       <div className="mb-[40px]">
-        <div className="mb-[16px]">
+        <div className="desktop:mb-[48px] mb-[16px]">
           <h2
             className={clsx(
               isToggled ? "text-[#FFF]" : "text-[#313E51]",
-              "text-[40px] font-[300] leading-[40px]"
+              "desktop:mb-[8px] tablet:text-[64px] tablet:leading-[64px] text-[40px] font-[300] leading-[40px]"
             )}
           >
             Welcome to the
@@ -51,7 +51,7 @@ function Home(props: {
           <h1
             className={clsx(
               isToggled ? "text-[#FFF]" : "text-[#313E51]",
-              "text-[40px] font-[600] leading-[40px]"
+              "tablet:text-[64px] tablet:leading-[64px] text-[40px] font-[600] leading-[40px]"
             )}
           >
             Frontend Quiz!
@@ -60,13 +60,13 @@ function Home(props: {
         <h3
           className={clsx(
             isToggled ? "text-[#ABC1E1]" : "text-[#313E51]",
-            "text-[14px] italic font-[400] leading-[21px]"
+            "tablet:text-[20px] tablet:leading-[30px] text-[14px] italic font-[400] leading-[21px]"
           )}
         >
           Pick a subject to get started.
         </h3>
       </div>
-      <div className="flex flex-col gap-[12px]">
+      <div className="desktop:w-[564px] flex flex-col gap-[12px]">
         {Data.quizzes.map((quiz, index) => (
           <Link key={index} to={`/quiz/${quiz.title.toLowerCase()} `}>
             <button
@@ -74,14 +74,16 @@ function Home(props: {
                 props.setShowQuestions(true);
               }}
               className={clsx(
-                isToggled ? "bg-[#3B4D66]" : "bg-[#FFF]",
-                "flex items-center gap-[16px] p-[12px] w-full rounded-lg"
+                isToggled
+                  ? "bg-[#3B4D66] hover:bg-[#415269]"
+                  : "bg-[#FFF] hover:bg-[#fafafa]",
+                "flex items-center gap-[16px] p-[12px] w-full rounded-lg "
               )}
             >
               <div
                 className={clsx(
                   getBackgroundColor(quiz.title),
-                  "w-[40px] p-[5.71px] rounded-md"
+                  "tablet:w-[56px] w-[40px] p-[5.71px] rounded-md"
                 )}
               >
                 <img src={icons[quiz.icon]} alt={quiz.title} />
@@ -89,7 +91,7 @@ function Home(props: {
               <h1
                 className={clsx(
                   isToggled ? "text-[#FFF]" : "text-[#313E51]",
-                  "text-[18px] font-[600] leading-[18px]"
+                  "tablet:text-[28px] tablet:leading-[28px] text-[18px] font-[600] leading-[18px]"
                 )}
               >
                 {quiz.title}

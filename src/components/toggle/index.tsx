@@ -8,7 +8,7 @@ function Toggle() {
   const { isToggled, setIsToggled } = useToggle();
 
   return (
-    <div className="flex mb-[16px]">
+    <div className="desktop:mb-[100px] flex mb-[16px]">
       <img
         className="w-[25px]"
         src={isToggled ? sunLight : sunDark}
