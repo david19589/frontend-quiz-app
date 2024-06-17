@@ -107,7 +107,7 @@ function Questions() {
       {!showResults && (
         <>
           <div>
-            <div className="desktop:translate-y-[-167px] tablet:translate-y-[-78px] absolute flex items-center gap-[16px] w-max mb-[16px]">
+            <div className="desktop:translate-y-[-167px] tablet:translate-y-[-78px] tablet:absolute flex items-center gap-[16px] w-max mb-[16px]">
               <div
                 className={clsx(
                   getBackgroundColor(questionObj.title),
