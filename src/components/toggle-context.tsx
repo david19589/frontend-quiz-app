@@ -7,9 +7,11 @@ interface ToggleContextType {
 
 const ToggleContext = createContext<ToggleContextType | undefined>(undefined);
 
-export const ToggleProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
+interface ToggleProviderProps {
+  children: ReactNode;
+}
+
+export const ToggleProvider = ({ children }: ToggleProviderProps) => {
   const [isToggled, setIsToggled] = useState(false);
 
   return (

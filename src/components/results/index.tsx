@@ -39,7 +39,7 @@ function Results(props: { correctAnswers: number }) {
   );
 
   if (!questionObj) {
-    return <div>Results not found</div>;
+    return "Results not found";
   }
 
   return (

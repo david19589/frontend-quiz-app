@@ -48,7 +48,7 @@ function Questions() {
   const { isToggled } = useToggle();
 
   if (!questionObj) {
-    return <div>Quiz not found</div>;
+    return "Quiz not found";
   }
 
   const handleNextQuestion = () => {
